@@ -1,11 +1,13 @@
 package com.csci318.microservice.orderservice.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -17,5 +19,5 @@ public class OrderDTORequest {
     private UUID restaurantId;
     private Double totalPrice;
     private String status;
-    private Timestamp orderTime;
+    private LocalDateTime orderTime;
 }

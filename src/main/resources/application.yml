@@ -10,7 +10,6 @@ spring:
     url: jdbc:h2:mem:mujiki_order
     username: mujiki_order
     password: nothing
-
   jpa:
     hibernate:
       ddl-auto: none
@@ -28,7 +27,6 @@ api:
 address:
   url:
     service: http://localhost:86/api/address
-
 
 # Server Configuration
 server:

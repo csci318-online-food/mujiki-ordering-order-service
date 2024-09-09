@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -19,5 +18,5 @@ public class OrderDTOResponse {
     private UUID restaurantId;
     private Double totalPrice;
     private String status;
-    private Timestamp orderTime;
+    private LocalDateTime orderTime;
 }

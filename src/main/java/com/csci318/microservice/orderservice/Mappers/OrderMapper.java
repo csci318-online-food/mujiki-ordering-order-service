@@ -3,9 +3,11 @@ package com.csci318.microservice.orderservice.Mappers;
 import com.csci318.microservice.orderservice.DTOs.OrderDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderDTOResponse;
 import com.csci318.microservice.orderservice.Entities.Order;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class OrderMapper implements Mapper<Order, OrderDTOResponse, OrderDTORequest> {
     @Override
     public OrderDTOResponse toDtos(Order entity) {

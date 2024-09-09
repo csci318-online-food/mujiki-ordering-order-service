@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -35,7 +35,7 @@ public class Order {
     private String status; // "CONFIRMED", "CANCELLED", "COMPLETED"
 
     @Column(name = "order_time")
-    private Timestamp orderTime;
+    private LocalDateTime orderTime;
 
     @Column(name = "create_at")
     private Timestamp createAt;
