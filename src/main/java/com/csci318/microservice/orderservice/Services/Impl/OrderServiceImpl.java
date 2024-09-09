@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -22,6 +23,15 @@ public class OrderServiceImpl implements IOrderService {
     public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+    }
+
+    @Override
+    public OrderDTOResponse findById(UUID id) {
+        Order order = this.orderRepository.findById(id).orElse(null);
+        if (order == null) {
+            throw new RuntimeException("Order not found");
+        }
+        return this.orderMapper.toDtos(order);
     }
 
     // NOTE: user and restaurant will be resolved by the gateway service

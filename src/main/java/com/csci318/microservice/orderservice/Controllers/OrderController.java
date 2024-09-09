@@ -4,10 +4,9 @@ import com.csci318.microservice.orderservice.DTOs.OrderDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderDTOResponse;
 import com.csci318.microservice.orderservice.Services.IOrderService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/order")
@@ -17,6 +16,12 @@ public class OrderController {
 
     public OrderController(IOrderService orderService) {
         this.orderService = orderService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTOResponse> getOrder(@PathVariable UUID id) {
+        OrderDTOResponse orderResponse = orderService.findById(id);
+        return ResponseEntity.ok(orderResponse);
     }
 
     @PostMapping("/create-order")
