@@ -39,11 +39,12 @@ public class OrderServiceImpl implements IOrderService {
     public OrderDTOResponse createOrder(OrderDTORequest orderDTO) {
         try {
             Order order = new Order();
+            order.setId(orderDTO.getId());
             order.setUserId(orderDTO.getUserId());
             order.setRestaurantId(orderDTO.getRestaurantId());
             order.setTotalPrice(orderDTO.getTotalPrice());
             order.setStatus(orderDTO.getStatus());
-            order.setOrderTime(LocalDateTime.now());
+            order.setOrderTime(orderDTO.getOrderTime());
             this.orderRepository.save(order);
             return this.orderMapper.toDtos(order);
         } catch (Exception e) {

@@ -25,6 +25,7 @@ public class OrderMapper implements Mapper<Order, OrderDTOResponse, OrderDTORequ
     @Override
     public Order toEntities(OrderDTORequest dto) {
         Order entity = new Order();
+        entity.setId(dto.getId());
         entity.setUserId(dto.getUserId());
         entity.setRestaurantId(dto.getRestaurantId());
         entity.setTotalPrice(dto.getTotalPrice());

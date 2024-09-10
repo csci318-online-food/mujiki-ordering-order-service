@@ -15,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class OrderDTORequest {
+    private UUID id;
     private UUID userId;
     private UUID restaurantId;
     private Double totalPrice;
