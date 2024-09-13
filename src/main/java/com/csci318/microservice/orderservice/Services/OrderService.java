@@ -8,9 +8,9 @@ import com.csci318.microservice.orderservice.Entities.OrderItem;
 
 import java.util.UUID;
 
-public interface IOrderService {
+public interface OrderService {
 
     OrderDTOResponse findById(UUID id);
     OrderDTOResponse createOrder(OrderDTORequest orderDTO);
-    OrderItemDTOResponse createOrderItem(OrderItemDTORequest orderItem);
+    OrderItemDTOResponse addOrderItem(UUID orderId, OrderItemDTORequest orderItem);
 }

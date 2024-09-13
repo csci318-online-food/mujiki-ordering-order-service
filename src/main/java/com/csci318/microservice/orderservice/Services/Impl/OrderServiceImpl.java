@@ -10,13 +10,13 @@ import com.csci318.microservice.orderservice.Mappers.OrderItemMapper;
 import com.csci318.microservice.orderservice.Mappers.OrderMapper;
 import com.csci318.microservice.orderservice.Repositories.OrderItemRepository;
 import com.csci318.microservice.orderservice.Repositories.OrderRepository;
-import com.csci318.microservice.orderservice.Services.IOrderService;
+import com.csci318.microservice.orderservice.Services.OrderService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class OrderServiceImpl implements IOrderService {
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -62,11 +62,11 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderItemDTOResponse createOrderItem(OrderItemDTORequest orderItem) {
+    public OrderItemDTOResponse addOrderItem(UUID orderId, OrderItemDTORequest orderItem) {
         try {
             OrderItem item = new OrderItem();
             item.setId(orderItem.getId());
-            item.setOrderId(orderItem.getOrderId());
+            item.setOrderId(orderId);
             item.setRestaurantId(orderItem.getRestaurantId());
             item.setItemId(orderItem.getItemId());
             item.setQuantity(orderItem.getQuantity());

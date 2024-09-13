@@ -5,7 +5,7 @@ import com.csci318.microservice.orderservice.DTOs.OrderDTOResponse;
 import com.csci318.microservice.orderservice.DTOs.OrderItemDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderItemDTOResponse;
 import com.csci318.microservice.orderservice.Entities.OrderItem;
-import com.csci318.microservice.orderservice.Services.IOrderService;
+import com.csci318.microservice.orderservice.Services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +15,9 @@ import java.util.UUID;
 @RequestMapping("/api/order")
 public class OrderController {
 
-    private final IOrderService orderService;
+    private final OrderService orderService;
 
-    public OrderController(IOrderService orderService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
@@ -33,9 +33,9 @@ public class OrderController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @PostMapping("/create-order-item")
-    public ResponseEntity<OrderItemDTOResponse> createOrderItem(@RequestBody OrderItemDTORequest orderRequest) {
-        OrderItemDTOResponse orderResponse = orderService.createOrderItem(orderRequest);
+    @PostMapping("/{id}/add-order-item")
+    public ResponseEntity<OrderItemDTOResponse> addOrderItem(@PathVariable UUID id, @RequestBody OrderItemDTORequest orderRequest) {
+        OrderItemDTOResponse orderResponse = orderService.addOrderItem(id, orderRequest);
         return ResponseEntity.ok(orderResponse);
     }
 }
