@@ -2,6 +2,8 @@ package com.csci318.microservice.orderservice.Controllers;
 
 import com.csci318.microservice.orderservice.DTOs.OrderDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderDTOResponse;
+import com.csci318.microservice.orderservice.DTOs.OrderItemDTORequest;
+import com.csci318.microservice.orderservice.DTOs.OrderItemDTOResponse;
 import com.csci318.microservice.orderservice.Entities.OrderItem;
 import com.csci318.microservice.orderservice.Services.IOrderService;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +34,8 @@ public class OrderController {
     }
 
     @PostMapping("/create-order-item")
-    public ResponseEntity<OrderItem> createOrderItem(@RequestBody OrderItem orderRequest) {
-        OrderItem orderResponse = orderService.createOrderItem(orderRequest);
+    public ResponseEntity<OrderItemDTOResponse> createOrderItem(@RequestBody OrderItemDTORequest orderRequest) {
+        OrderItemDTOResponse orderResponse = orderService.createOrderItem(orderRequest);
         return ResponseEntity.ok(orderResponse);
     }
 }

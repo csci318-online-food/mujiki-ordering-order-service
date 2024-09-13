@@ -2,17 +2,17 @@ package com.csci318.microservice.orderservice.Services.Impl;
 
 import com.csci318.microservice.orderservice.DTOs.OrderDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderDTOResponse;
+import com.csci318.microservice.orderservice.DTOs.OrderItemDTORequest;
+import com.csci318.microservice.orderservice.DTOs.OrderItemDTOResponse;
 import com.csci318.microservice.orderservice.Entities.Order;
 import com.csci318.microservice.orderservice.Entities.OrderItem;
+import com.csci318.microservice.orderservice.Mappers.OrderItemMapper;
 import com.csci318.microservice.orderservice.Mappers.OrderMapper;
 import com.csci318.microservice.orderservice.Repositories.OrderItemRepository;
 import com.csci318.microservice.orderservice.Repositories.OrderRepository;
 import com.csci318.microservice.orderservice.Services.IOrderService;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Service
@@ -21,14 +21,16 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OrderServiceImpl.class);
 
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
-                            OrderMapper orderMapper) {
+                            OrderMapper orderMapper, OrderItemMapper orderItemMapper) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;
+        this.orderItemMapper = orderItemMapper;
     }
 
     @Override
@@ -60,8 +62,21 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderItem createOrderItem(OrderItem orderItem) {
-        return this.orderItemRepository.save(orderItem);
+    public OrderItemDTOResponse createOrderItem(OrderItemDTORequest orderItem) {
+        try {
+            OrderItem item = new OrderItem();
+            item.setId(orderItem.getId());
+            item.setOrderId(orderItem.getOrderId());
+            item.setRestaurantId(orderItem.getRestaurantId());
+            item.setItemId(orderItem.getItemId());
+            item.setQuantity(orderItem.getQuantity());
+            item.setPrice(orderItem.getPrice());
+            this.orderItemRepository.save(item);
+            return this.orderItemMapper.toDtos(item);
+        } catch (Exception e) {
+            log.error("Failed to create order item", e);
+            throw new RuntimeException("Failed to create order item", e);
+        }
     }
 
 }

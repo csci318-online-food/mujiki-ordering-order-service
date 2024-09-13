@@ -1,6 +1,5 @@
 package com.csci318.microservice.orderservice.DTOs;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OrderItemDTORequest {
-
+public class OrderItemDTOResponse {
     private UUID id;
     private UUID orderId;
     private UUID restaurantId;
