@@ -4,7 +4,7 @@ import com.csci318.microservice.orderservice.DTOs.OrderDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderDTOResponse;
 import com.csci318.microservice.orderservice.DTOs.OrderItemDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderItemDTOResponse;
-import com.csci318.microservice.orderservice.Entities.OrderItem;
+import com.csci318.microservice.orderservice.Domain.Entities.OrderItem;
 import com.csci318.microservice.orderservice.Services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

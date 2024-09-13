@@ -1,4 +1,4 @@
-package com.csci318.microservice.orderservice.Entities;
+package com.csci318.microservice.orderservice.Domain.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

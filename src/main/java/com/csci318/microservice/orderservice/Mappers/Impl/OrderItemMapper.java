@@ -1,8 +1,10 @@
-package com.csci318.microservice.orderservice.Mappers;
+package com.csci318.microservice.orderservice.Mappers.Impl;
 
 import com.csci318.microservice.orderservice.DTOs.OrderItemDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderItemDTOResponse;
-import com.csci318.microservice.orderservice.Entities.OrderItem;
+import com.csci318.microservice.orderservice.Domain.Entities.OrderItem;
+import com.csci318.microservice.orderservice.Mappers.Mapper;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
