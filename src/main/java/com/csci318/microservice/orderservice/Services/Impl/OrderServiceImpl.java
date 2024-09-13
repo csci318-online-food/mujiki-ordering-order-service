@@ -3,7 +3,9 @@ package com.csci318.microservice.orderservice.Services.Impl;
 import com.csci318.microservice.orderservice.DTOs.OrderDTORequest;
 import com.csci318.microservice.orderservice.DTOs.OrderDTOResponse;
 import com.csci318.microservice.orderservice.Entities.Order;
+import com.csci318.microservice.orderservice.Entities.OrderItem;
 import com.csci318.microservice.orderservice.Mappers.OrderMapper;
+import com.csci318.microservice.orderservice.Repositories.OrderItemRepository;
 import com.csci318.microservice.orderservice.Repositories.OrderRepository;
 import com.csci318.microservice.orderservice.Services.IOrderService;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,15 @@ import java.util.UUID;
 public class OrderServiceImpl implements IOrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OrderServiceImpl.class);
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            OrderItemRepository orderItemRepository,
+                            OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;
     }
 
@@ -51,6 +57,11 @@ public class OrderServiceImpl implements IOrderService {
             log.error("Failed to create order", e);
             throw new RuntimeException("Failed to create order", e);
         }
+    }
+
+    @Override
+    public OrderItem createOrderItem(OrderItem orderItem) {
+        return this.orderItemRepository.save(orderItem);
     }
 
 }

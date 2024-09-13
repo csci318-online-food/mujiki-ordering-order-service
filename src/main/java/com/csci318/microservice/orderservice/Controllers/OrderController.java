@@ -30,4 +30,9 @@ public class OrderController {
         return ResponseEntity.ok(orderResponse);
     }
 
+    @PostMapping("/create-order-item")
+    public ResponseEntity<OrderDTOResponse> createOrderItem(@RequestBody OrderDTORequest orderRequest) {
+        OrderDTOResponse orderResponse = orderService.createOrder(orderRequest);
+        return ResponseEntity.ok(orderResponse);
+    }
 }
