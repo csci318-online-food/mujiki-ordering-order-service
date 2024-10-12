@@ -19,6 +19,18 @@ spring:
     change-log: classpath:logs/db.changelog-master.xml
     enabled: true
 
+  # Kafka Configuration
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092  # Kafka broker location, can be a list for multiple brokers
+      bindings:
+        orderStatusChannel:
+          destination: orderStatus  # Topic for cargo bookings
+          content-type: application/json  # Content type for messages
+
+
 # API Configuration
 api:
   endpoint:
