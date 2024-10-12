@@ -20,3 +20,14 @@ CREATE TABLE order_items (
     quantity INT,
     price DOUBLE PRECISION
 );
+
+CREATE TABLE order_events (
+    id UUID PRIMARY KEY,
+    event_name VARCHAR(255),
+    order_id UUID,
+    user_id UUID,
+    restaurant_id UUID,
+    old_status VARCHAR(255) NULL,
+    status VARCHAR(255) NOT NULL,
+    change_time TIMESTAMP
+);

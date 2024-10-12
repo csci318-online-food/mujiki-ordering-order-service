@@ -6,26 +6,33 @@ import com.csci318.microservice.order.DTOs.OrderItemDTORequest;
 import com.csci318.microservice.order.DTOs.OrderItemDTOResponse;
 import com.csci318.microservice.order.Domain.Entities.Order;
 import com.csci318.microservice.order.Domain.Entities.OrderItem;
+import com.csci318.microservice.order.Domain.Events.OrderStatusChangedEvent;
 import com.csci318.microservice.order.Mappers.Impl.OrderItemMapper;
 import com.csci318.microservice.order.Mappers.Impl.OrderMapper;
 import com.csci318.microservice.order.Repositories.OrderItemRepository;
 import com.csci318.microservice.order.Repositories.OrderRepository;
 import com.csci318.microservice.order.Services.OrderService;
-import com.csci318.microservice.order.shareddomain.OrderStatusEvent;
-import com.csci318.microservice.order.shareddomain.OrderStatusEventData;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
@@ -58,8 +65,15 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderTime(orderDTO.getOrderTime());
             this.orderRepository.save(order);
 
-            //create event for orderStatus
-            new OrderStatusEvent(new OrderStatusEventData(orderDTO.getId(), orderDTO.getStatus()));
+            OrderStatusChangedEvent event = new OrderStatusChangedEvent();
+            event.setEventName("Order created");
+            event.setOrderId(order.getId());
+            event.setUserId(order.getUserId());
+            event.setRestaurantId(order.getRestaurantId());
+            event.setOldStatus(null);
+            event.setStatus(order.getStatus());
+            event.setChangeTime(LocalDateTime.now());
+            eventPublisher.publishEvent(event);
 
             return this.orderMapper.toDtos(order);
 
