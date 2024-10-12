@@ -1,0 +1,90 @@
+package com.csci318.microservice.order.Services.Impl;
+
+import com.csci318.microservice.order.DTOs.OrderDTORequest;
+import com.csci318.microservice.order.DTOs.OrderDTOResponse;
+import com.csci318.microservice.order.DTOs.OrderItemDTORequest;
+import com.csci318.microservice.order.DTOs.OrderItemDTOResponse;
+import com.csci318.microservice.order.Domain.Entities.Order;
+import com.csci318.microservice.order.Domain.Entities.OrderItem;
+import com.csci318.microservice.order.Mappers.Impl.OrderItemMapper;
+import com.csci318.microservice.order.Mappers.Impl.OrderMapper;
+import com.csci318.microservice.order.Repositories.OrderItemRepository;
+import com.csci318.microservice.order.Repositories.OrderRepository;
+import com.csci318.microservice.order.Services.OrderService;
+import com.csci318.microservice.order.shareddomain.OrderStatusEvent;
+import com.csci318.microservice.order.shareddomain.OrderStatusEventData;
+
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+public class OrderServiceImpl implements OrderService {
+
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            OrderItemRepository orderItemRepository,
+                            OrderMapper orderMapper, OrderItemMapper orderItemMapper) {
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
+        this.orderMapper = orderMapper;
+        this.orderItemMapper = orderItemMapper;
+    }
+
+    @Override
+    public OrderDTOResponse findById(UUID id) {
+        Order order = this.orderRepository.findById(id).orElse(null);
+        if (order == null) {
+            throw new RuntimeException("Order not found");
+        }
+        return this.orderMapper.toDtos(order);
+    }
+
+    // NOTE: user and restaurant will be resolved by the gateway service
+    @Override
+    public OrderDTOResponse createOrder(OrderDTORequest orderDTO) {
+        try {
+            Order order = new Order();
+            order.setId(orderDTO.getId());
+            order.setUserId(orderDTO.getUserId());
+            order.setRestaurantId(orderDTO.getRestaurantId());
+            order.setTotalPrice(orderDTO.getTotalPrice());
+            order.setStatus(orderDTO.getStatus());
+            order.setOrderTime(orderDTO.getOrderTime());
+            this.orderRepository.save(order);
+
+            //create event for orderStatus
+            new OrderStatusEvent(new OrderStatusEventData(orderDTO.getId(), orderDTO.getStatus()));
+
+            return this.orderMapper.toDtos(order);
+
+        } catch (Exception e) {
+            log.error("Failed to create order", e);
+            throw new RuntimeException("Failed to create order", e);
+        }
+    }
+
+    @Override
+    public OrderItemDTOResponse addOrderItem(UUID orderId, OrderItemDTORequest orderItem) {
+        try {
+            OrderItem item = new OrderItem();
+            item.setId(orderItem.getId());
+            item.setOrderId(orderId);
+            item.setRestaurantId(orderItem.getRestaurantId());
+            item.setItemId(orderItem.getItemId());
+            item.setQuantity(orderItem.getQuantity());
+            item.setPrice(orderItem.getPrice());
+            this.orderItemRepository.save(item);
+            return this.orderItemMapper.toDtos(item);
+        } catch (Exception e) {
+            log.error("Failed to create order item", e);
+            throw new RuntimeException("Failed to create order item", e);
+        }
+    }
+
+}
