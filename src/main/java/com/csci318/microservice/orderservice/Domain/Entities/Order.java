@@ -48,6 +48,8 @@ public class Order {
 
     @Column(name = "create_by", length = 64)
     private String createBy;
+
+    
 }
 
 

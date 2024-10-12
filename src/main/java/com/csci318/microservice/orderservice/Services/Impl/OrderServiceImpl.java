@@ -11,6 +11,9 @@ import com.csci318.microservice.orderservice.Mappers.Impl.OrderMapper;
 import com.csci318.microservice.orderservice.Repositories.OrderItemRepository;
 import com.csci318.microservice.orderservice.Repositories.OrderRepository;
 import com.csci318.microservice.orderservice.Services.OrderService;
+import com.csci318.microservice.orderservice.shareddomain.OrderStatusEvent;
+import com.csci318.microservice.orderservice.shareddomain.OrderStatusEventData;
+
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -54,7 +57,12 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(orderDTO.getStatus());
             order.setOrderTime(orderDTO.getOrderTime());
             this.orderRepository.save(order);
+
+            //create event for orderStatus
+            new OrderStatusEvent(new OrderStatusEventData(orderDTO.getId(), orderDTO.getStatus()));
+
             return this.orderMapper.toDtos(order);
+
         } catch (Exception e) {
             log.error("Failed to create order", e);
             throw new RuntimeException("Failed to create order", e);
