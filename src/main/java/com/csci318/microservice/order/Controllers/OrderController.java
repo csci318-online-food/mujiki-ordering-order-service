@@ -1,5 +1,6 @@
 package com.csci318.microservice.order.Controllers;
 
+import com.csci318.microservice.order.Constants.OrderStatus;
 import com.csci318.microservice.order.DTOs.OrderDTORequest;
 import com.csci318.microservice.order.DTOs.OrderDTOResponse;
 import com.csci318.microservice.order.DTOs.OrderItemDTORequest;
@@ -29,6 +30,12 @@ public class OrderController {
     @PostMapping("/create-order")
     public ResponseEntity<OrderDTOResponse> createOrder(@RequestBody OrderDTORequest orderRequest) {
         OrderDTOResponse orderResponse = orderService.createOrder(orderRequest);
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @PostMapping("/{id}/update-order-status")
+    public ResponseEntity<OrderDTOResponse> updateOrderStatus(@PathVariable UUID id, @RequestParam(name = "orderStatus") OrderStatus orderStatus) {
+        OrderDTOResponse orderResponse = orderService.updateOrderStatus(id, orderStatus);
         return ResponseEntity.ok(orderResponse);
     }
 

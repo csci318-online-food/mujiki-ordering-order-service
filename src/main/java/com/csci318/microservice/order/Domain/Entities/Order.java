@@ -52,7 +52,24 @@ public class Order {
     @Column(name = "create_by", length = 64)
     private String createBy;
 
-    
+    // Tries to set the order status to newStatus.
+    // Throws if the update is invalid.
+    // Otherwise, returns the old status.
+    public OrderStatus updateStatus(OrderStatus newStatus) {
+        OrderStatus oldStatus = this.status;
+
+        if (newStatus == OrderStatus.CANCELLED) {
+            if (oldStatus == OrderStatus.COMPLETED) {
+                throw new RuntimeException("Cannot cancel a completed order.");
+            }
+        } else {
+            if (newStatus.compareTo(oldStatus) <= 0) {
+                throw new RuntimeException("Cannot proceed to an earlier stage.");
+            }
+        }
+
+        setStatus(newStatus);
+
+        return oldStatus;
+    }
 }
-
-

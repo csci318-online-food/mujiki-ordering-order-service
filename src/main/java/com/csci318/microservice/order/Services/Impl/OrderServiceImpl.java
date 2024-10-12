@@ -1,5 +1,6 @@
 package com.csci318.microservice.order.Services.Impl;
 
+import com.csci318.microservice.order.Constants.OrderStatus;
 import com.csci318.microservice.order.DTOs.OrderDTORequest;
 import com.csci318.microservice.order.DTOs.OrderDTOResponse;
 import com.csci318.microservice.order.DTOs.OrderItemDTORequest;
@@ -80,6 +81,40 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             log.error("Failed to create order", e);
             throw new RuntimeException("Failed to create order", e);
+        }
+    }
+
+    @Override
+    public OrderDTOResponse updateOrderStatus(UUID id, OrderStatus orderStatus) {
+        Order order = this.orderRepository.findById(id).orElse(null);
+        if (order == null) {
+            throw new RuntimeException("Order not found");
+        }
+
+        try {
+            OrderStatus oldStatus = order.updateStatus(orderStatus);
+            this.orderRepository.save(order);
+
+            log.info(
+                "Updated order " + order.getId().toString() +
+                " from " + oldStatus.toString() +
+                " to " + orderStatus.toString() + "."
+            );
+
+            OrderStatusChangedEvent event = new OrderStatusChangedEvent();
+            event.setEventName("Order created");
+            event.setOrderId(order.getId());
+            event.setUserId(order.getUserId());
+            event.setRestaurantId(order.getRestaurantId());
+            event.setOldStatus(oldStatus);
+            event.setStatus(order.getStatus());
+            event.setChangeTime(LocalDateTime.now());
+            eventPublisher.publishEvent(event);
+
+            return this.orderMapper.toDtos(order);
+        } catch (Exception e) {
+            log.error("Failed to update order status", e);
+            throw new RuntimeException("Faield to update order status", e);
         }
     }
 
