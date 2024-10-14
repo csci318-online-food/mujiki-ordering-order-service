@@ -1,16 +1,26 @@
 package com.csci318.microservice.order.Domain.Entities;
 
-import jakarta.persistence.*;
+import com.csci318.microservice.order.Constants.OrderStatus;
+import com.csci318.microservice.order.Domain.Relations.Restaurant;
+import com.csci318.microservice.order.Utils.Annotations.ManyToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.csci318.microservice.order.Constants.OrderStatus;
+import org.apache.catalina.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,9 +35,11 @@ public class Order {
     private UUID id;
 
     @Column(name = "user_id", nullable = false)
+    @ManyToOne(targetEntity = User.class)
     private UUID userId;
 
     @Column(name = "restaurant_id", nullable = false)
+    @ManyToOne(targetEntity = Restaurant.class)
     private UUID restaurantId;
 
     @Column(name = "total_price")
