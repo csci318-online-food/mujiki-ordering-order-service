@@ -27,10 +27,10 @@ public class OrderStatusChangedEvent {
     private UUID orderId;
     private UUID userId;
     private UUID restaurantId;
+    private OrderStatus status;
     @Nullable
     private OrderStatus oldStatus;
-    private OrderStatus status;
-    private LocalDateTime changeTime;
     @Nullable
     private Double totalPrice;
+    private LocalDateTime changeTime;
 }
