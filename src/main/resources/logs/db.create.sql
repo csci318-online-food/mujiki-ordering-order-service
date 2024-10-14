@@ -27,7 +27,8 @@ CREATE TABLE order_events (
     order_id UUID,
     user_id UUID,
     restaurant_id UUID,
-    old_status VARCHAR(255) NULL,
     status VARCHAR(255) NOT NULL,
+    old_status VARCHAR(255) NULL,
+    total_price DOUBLE PRECISION,
     change_time TIMESTAMP
 );
