@@ -33,7 +33,7 @@ public class OrderController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    @PostMapping("/{id}/update-order-status")
+    @PostMapping("/{id}/status")
     public ResponseEntity<OrderDTOResponse> updateOrderStatus(@PathVariable UUID id, @RequestParam(name = "orderStatus") OrderStatus orderStatus) {
         OrderDTOResponse orderResponse = orderService.updateOrderStatus(id, orderStatus);
         return ResponseEntity.ok(orderResponse);
