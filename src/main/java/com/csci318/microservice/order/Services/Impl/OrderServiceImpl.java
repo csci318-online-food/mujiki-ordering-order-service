@@ -109,6 +109,11 @@ public class OrderServiceImpl implements OrderService {
             event.setOldStatus(oldStatus);
             event.setStatus(order.getStatus());
             event.setChangeTime(LocalDateTime.now());
+
+            if (event.getStatus() == OrderStatus.COMPLETED) {
+                event.setTotalPrice(order.getTotalPrice);
+            }
+
             eventPublisher.publishEvent(event);
 
             return this.orderMapper.toDtos(order);

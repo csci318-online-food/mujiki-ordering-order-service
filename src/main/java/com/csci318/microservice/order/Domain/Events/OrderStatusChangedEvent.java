@@ -31,4 +31,6 @@ public class OrderStatusChangedEvent {
     private OrderStatus oldStatus;
     private OrderStatus status;
     private LocalDateTime changeTime;
+    @Nullable
+    private Double totalPrice;
 }
